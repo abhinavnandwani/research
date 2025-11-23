@@ -1,0 +1,182 @@
+#!/bin/bash
+# CHTC Tools - Main CLI
+# Comprehensive local-first management for CHTC operations
+
+set -e
+
+# Get script directory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CHTC_ROOT="$(dirname "${SCRIPT_DIR}")"
+
+# Source utilities
+# shellcheck source=lib/utils.sh
+source "${CHTC_ROOT}/lib/utils.sh"
+# shellcheck source=lib/ssh.sh
+source "${CHTC_ROOT}/lib/ssh.sh"
+
+# Load configuration
+load_config || exit 1
+
+# Command dispatcher
+COMMAND="${1:-help}"
+shift || true
+
+case "${COMMAND}" in
+    connect|conn|c)
+        ssh_connect
+        ;;
+
+    disconnect|disc|d)
+        ssh_disconnect
+        ;;
+
+    status|st)
+        ssh_status
+        ;;
+
+    login|ssh|l)
+        ssh_login
+        ;;
+
+    exec|e)
+        ssh_exec "$@"
+        ;;
+
+    upload|up|push)
+        if [[ $# -lt 2 ]]; then
+            log_error "Usage: chtc upload <local_path> <remote_path>"
+            exit 1
+        fi
+        ssh_upload "$1" "$2"
+        ;;
+
+    download|down|pull)
+        if [[ $# -lt 2 ]]; then
+            log_error "Usage: chtc download <remote_path> <local_path>"
+            exit 1
+        fi
+        ssh_download "$1" "$2"
+        ;;
+
+    submit|sub|s)
+        exec "${CHTC_ROOT}/scripts/submit.sh" "$@"
+        ;;
+
+    monitor|mon|m)
+        exec "${CHTC_ROOT}/scripts/monitor.sh" "$@"
+        ;;
+
+    logs)
+        exec "${CHTC_ROOT}/scripts/fetch_logs.sh" "$@"
+        ;;
+
+    queue|q)
+        ssh_exec "condor_q"
+        ;;
+
+    container|cont)
+        exec "${CHTC_ROOT}/scripts/container.sh" "$@"
+        ;;
+
+    project|proj|p)
+        exec "${CHTC_ROOT}/scripts/project.sh" "$@"
+        ;;
+
+    wandb|wb)
+        exec "${CHTC_ROOT}/scripts/wandb_manager.sh" "$@"
+        ;;
+
+    discover|scan)
+        exec "${CHTC_ROOT}/scripts/discover_env.sh" "$@"
+        ;;
+
+    import)
+        exec "${CHTC_ROOT}/scripts/import_existing.sh" "$@"
+        ;;
+
+    quota)
+        log_info "Checking disk quota..."
+        echo ""
+        echo "=== /home quota ==="
+        ssh_exec "quota -s"
+        echo ""
+        echo "=== /staging usage ==="
+        ssh_exec "du -sh ${CHTC_STAGING} 2>/dev/null || echo 'No staging directory'"
+        ;;
+
+    help|h|-h|--help)
+        cat <<EOF
+CHTC Tools - Comprehensive management for CHTC operations
+
+Usage: chtc <command> [options]
+
+CONNECTION:
+  connect, conn, c           Establish SSH connection (will prompt for 2FA)
+  disconnect, disc, d        Close SSH connection
+  status, st                 Show connection status
+  login, ssh, l              Start interactive SSH session
+
+FILE TRANSFER:
+  upload, up <local> <remote>    Upload file/directory
+  download, down <remote> <local> Download file/directory
+  quota                           Check disk usage and quotas
+
+JOB MANAGEMENT:
+  submit, sub <file> [options]   Submit HTCondor job
+    --wandb                      Enable WandB tracking
+    --project <name>             WandB project name
+    --gpu                        Request GPU resources
+    --cpus <n>                   Request N CPUs
+    --memory <size>              Request memory (e.g., 4GB)
+    --disk <size>                Request disk (e.g., 10GB)
+
+  monitor, mon                   Monitor running jobs
+  queue, q                       Show job queue (condor_q)
+  logs <job-id>                  Fetch job logs
+
+CONTAINERS:
+  container build <def-file>     Build Apptainer container
+  container list                 List containers in staging
+  container upload <sif>         Upload container to staging
+
+PROJECTS:
+  project init <name>            Initialize new project
+  project sync <name>            Sync project to CHTC
+  project list                   List all projects
+
+WANDB:
+  wandb init                     Initialize WandB configuration
+  wandb link <job-id> <run-id>   Link job to WandB run
+  wandb dashboard                Open WandB dashboard
+
+UTILITIES:
+  exec, e <command>              Execute command on CHTC
+  help, h                        Show this help
+
+Examples:
+  # Connect and check status
+  chtc connect
+  chtc status
+
+  # Submit job with WandB tracking
+  chtc submit my_job.sub --wandb --project my-research
+
+  # Build and upload container
+  chtc container build pytorch.def
+
+  # Monitor jobs in real-time
+  chtc monitor
+
+  # Fetch logs for job
+  chtc logs 12345
+
+For more info: https://chtc.cs.wisc.edu/
+EOF
+        ;;
+
+    *)
+        log_error "Unknown command: ${COMMAND}"
+        echo "Run 'chtc help' for usage information"
+        exit 1
+        ;;
+esac

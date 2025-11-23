@@ -1,0 +1,44 @@
+# WandB Sweep Configuration Example
+# Use with: wandb sweep wandb-sweep.yaml
+
+program: train.py
+method: bayes
+
+metric:
+  name: validation_loss
+  goal: minimize
+
+parameters:
+  learning_rate:
+    distribution: log_uniform_values
+    min: 0.0001
+    max: 0.1
+
+  batch_size:
+    values: [16, 32, 64, 128]
+
+  optimizer:
+    values: ["adam", "sgd", "adamw"]
+
+  hidden_size:
+    distribution: int_uniform
+    min: 64
+    max: 512
+
+  dropout:
+    distribution: uniform
+    min: 0.1
+    max: 0.5
+
+# Run configuration
+command:
+  - ${env}
+  - python
+  - ${program}
+  - ${args}
+
+# To use with CHTC:
+# 1. Create sweep: wandb sweep wandb-sweep.yaml
+# 2. Get sweep ID from output
+# 3. Create agent submit file that runs: wandb agent SWEEP_ID
+# 4. Submit multiple jobs: queue 10 (for 10 parallel agents)

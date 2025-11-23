@@ -1,0 +1,32 @@
+# HTCondor Submit File for MNIST GPU Training
+# Using existing scFoundation container
+
+# Container (your existing one in staging!)
+container_image = osdf:///chtc/staging/nandwani2/scFoundation-container.sif
+
+# Executable
+executable = run_mnist.sh
+arguments = --batch-size 128 --epochs 15 --lr 0.001
+
+# Transfer files
+transfer_input_files = train_mnist.py
+
+# Output files
+log = logs/mnist_$(Cluster)_$(Process).log
+error = logs/mnist_$(Cluster)_$(Process).err
+output = logs/mnist_$(Cluster)_$(Process).out
+
+# Environment variables for WandB
+environment = "WANDB_API_KEY=f04957e341167ac5452921a251b0921fedd3558b WANDB_PROJECT=chtc-mnist"
+
+# GPU Requirements
+request_gpus = 1
+request_cpus = 4
+request_memory = 16GB
+request_disk = 10GB
+
+# CHTC staging requirement + GPU capability
+Requirements = (Target.HasCHTCStaging == true) && (TARGET.CUDACapability >= 5.0)
+
+# Queue the job
+queue 1

@@ -1,0 +1,38 @@
+# CHTC Tools gitignore
+
+# Local workspace (user data)
+local/
+*.log
+*.err
+*.out
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv
+
+# User configuration
+.chtcrc
+
+# SSH control sockets
+.chtc/ssh_control/
+
+# WandB
+wandb/
+.wandb/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

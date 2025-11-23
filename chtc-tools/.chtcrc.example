@@ -1,0 +1,28 @@
+# CHTC Configuration
+# Copy this to ~/.chtcrc and fill in your details
+
+# CHTC Credentials
+CHTC_USERNAME="nandwani2"
+CHTC_HOST="ap2002.chtc.wisc.edu"
+CHTC_PORT="22"
+
+# Remote Paths
+CHTC_HOME="/home/${CHTC_USERNAME}"
+CHTC_STAGING="/staging/${CHTC_USERNAME}"
+
+# Local Workspace
+CHTC_LOCAL_WORKSPACE="${HOME}/chtc-workspace"
+
+# SSH Settings
+SSH_CONTROL_PERSIST="4h"
+SSH_KEEPALIVE="60"
+
+# Default Job Resources
+DEFAULT_CPUS="1"
+DEFAULT_MEMORY="4GB"
+DEFAULT_DISK="5GB"
+
+# WandB Integration
+WANDB_API_KEY="f04957e341167ac5452921a251b0921fedd3558b"
+WANDB_ENTITY=""  # Your wandb username/team (optional)
+WANDB_PROJECT="chtc-jobs"  # Default project name

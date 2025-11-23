@@ -1,0 +1,43 @@
+Bootstrap: docker
+From: pytorch/pytorch:2.1.0-cuda12.1-cudnn8-runtime
+
+%post
+    # Update and install dependencies
+    apt-get update && apt-get install -y \
+        git \
+        wget \
+        vim \
+        && rm -rf /var/lib/apt/lists/*
+
+    # Install additional Python packages
+    pip install --no-cache-dir \
+        wandb \
+        numpy \
+        pandas \
+        scikit-learn \
+        matplotlib \
+        seaborn \
+        tqdm
+
+%environment
+    export PYTHONUNBUFFERED=1
+    export WANDB_DIR=/tmp/wandb
+
+%runscript
+    exec python "$@"
+
+%labels
+    Author CHTC Tools
+    Version 1.0
+    Description PyTorch container with GPU support and WandB
+
+%help
+    PyTorch 2.1.0 with CUDA 12.1 support and WandB integration.
+
+    Usage:
+        apptainer exec --nv container.sif python script.py
+
+    In HTCondor submit file:
+        container_image = osdf:///chtc/staging/USERNAME/pytorch-gpu.sif
+        request_gpus = 1
+        requirements = (HasCHTCStaging == true) && (TARGET.CUDACapability >= 5.0)
