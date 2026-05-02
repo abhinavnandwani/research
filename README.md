@@ -6,6 +6,7 @@ Personal repo: reading notes and CHTC helper tooling.
 
 | Path | Purpose |
 |------|---------|
+| `papers/ai-for-silicon-design/` | Notes and reading queue for AI-for-silicon-design topics. |
 | `papers/llm-architecture/` | Long-form paper surveys (e.g. TurboQuant). |
 | `papers/tpu/` | TPU-related PDF and notes. |
 | `utils/chtc-tools/` | Scripts and templates for [CHTC](https://chtc.cs.wisc.edu/) (HTCondor, SSH, WandB hooks). |
