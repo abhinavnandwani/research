@@ -1,28 +1,135 @@
-# Python
+# --- Python ---
 __pycache__/
 *.py[cod]
 *$py.class
 .Python
+*.so
+
 .venv/
 venv/
 env/
+ENV/
 
-# Jupyter
+*.egg
+*.egg-info/
+.eggs/
+dist/
+build/
+pip-wheel-metadata/
+wheels/
+*.manifest
+*.spec
+
+# Type checkers / linters / test
+.mypy_cache/
+.pytype/
+.ruff_cache/
+.pyre/
+.pytest_cache/
+.hypothesis/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# uv / Poetry / PDM (keep committed: pyproject.toml, uv.lock when you use them)
+.python-version
+
+# --- Jupyter ---
 .ipynb_checkpoints/
+*-checkpoint.ipynb
 
-# OS / IDE
-.DS_Store
-.idea/
-.vscode/
-*.swp
-*~
-
-# Agent / local tooling
-.claude/
-
-# Experiment tooling
+# --- ML / experiments (local runs; adjust if you version small fixtures) ---
 wandb/
 .wandb/
+lightning_logs/
+mlruns/
+runs/
+outputs/
+checkpoints/
+*.ckpt
+*.pth
+*.pt
+*.onnx
+*.h5
+*.pkl
+*.pickle
+tensorboard/
+*.tensorboard
+# Root-only: common ML dataset layout (comment out if you commit datasets here)
+/data/raw/
+/data/processed/
 
-# Secrets (never commit real keys)
+# --- Node (if you add JS tooling) ---
+node_modules/
+.npm
+.pnpm-store/
+
+# --- LaTeX / writing (if you compile papers locally) ---
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.out
+
+# --- OS ---
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+Thumbs.db
+Desktop.ini
+
+# --- Editors & tools ---
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# VS Code (local); commit shared snippets/tasks explicitly if needed
+.vscode/
+
+# Cursor (local workspace/agent state)
+.cursor/
+
+# --- Agent / AI assistants (any depth) ---
+**/.claude/
+**/.copilot/
+
+# --- Secrets & local config (never commit) ---
 .chtcrc
+.env
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.private.key
+id_rsa
+id_rsa.pub
+*.pfx
+secrets.yaml
+secrets.yml
+credentials.json
+*-credentials.json
+service-account*.json
+
+# --- CHTC / batch jobs (local outputs) ---
+*.log
+*.err
+*.out
+core.*
+
+# --- Archives & large scratch (optional local drops) ---
+*.tmp
+*.temp
+*.bak
+.cache/
