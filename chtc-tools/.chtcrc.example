@@ -23,6 +23,6 @@ DEFAULT_MEMORY="4GB"
 DEFAULT_DISK="5GB"
 
 # WandB Integration
-WANDB_API_KEY="f04957e341167ac5452921a251b0921fedd3558b"
+WANDB_API_KEY="your_wandb_api_key_here"
 WANDB_ENTITY=""  # Your wandb username/team (optional)
 WANDB_PROJECT="chtc-jobs"  # Default project name

@@ -11,24 +11,14 @@ echo "Date: $(date)"
 echo "Job ID: ${CLUSTER:-local}.${PROCESS:-0}"
 echo "=========================================="
 
-# Check GPU
-echo ""
-echo "GPU Information:"
-nvidia-smi --query-gpu=name,memory.total,driver_version --format=csv
-echo ""
-
-# Check CUDA
-echo "CUDA Version:"
-nvcc --version || echo "nvcc not available (using runtime)"
-echo ""
-
 # Check Python and PyTorch
+echo ""
 echo "Python Version:"
 python3 --version
 echo ""
 
 echo "PyTorch Version:"
-python3 -c "import torch; print(f'PyTorch: {torch.__version__}'); print(f'CUDA available: {torch.cuda.is_available()}')" || {
+python3 -c "import torch; print(f'PyTorch: {torch.__version__}'); print(f'CUDA available: {torch.cuda.is_available()}'); print(f'CUDA device count: {torch.cuda.device_count()}'); print(f'CUDA device name: {torch.cuda.get_device_name(0) if torch.cuda.is_available() else \"N/A\"}')" || {
     echo "PyTorch not available, installing..."
     pip install --user torch torchvision wandb
 }

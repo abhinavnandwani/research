@@ -245,7 +245,7 @@ grep WANDB_API_KEY ~/.chtcrc
 
 Test WandB locally:
 ```bash
-python3 -c "import wandb; wandb.login(key='f04957e341167ac5452921a251b0921fedd3558b')"
+python3 -c "import os, wandb; wandb.login(key=os.environ['WANDB_API_KEY'])"
 ```
 
 ## Tips

@@ -97,7 +97,7 @@ ssh chtc  # Just works!
 
 ### 3. WandB Integration
 
-**API Key configured**: `f04957e341167ac5452921a251b0921fedd3558b`
+**API Key**: Set `WANDB_API_KEY` in `~/.chtcrc` (never commit real keys).
 
 **Three levels of tracking:**
 1. **Submission**: Job metadata, cluster ID, resources

@@ -1,32 +1,36 @@
 # HTCondor Submit File for MNIST GPU Training
-# Using existing scFoundation container
-
-# Container (your existing one in staging!)
-container_image = osdf:///chtc/staging/nandwani2/scFoundation-container.sif
+# Using segformer container (has PyTorch + CUDA tools)
 
 # Executable
 executable = run_mnist.sh
-arguments = --batch-size 128 --epochs 15 --lr 0.001
+arguments = --batch-size 256 --epochs 2 --lr 0.001
 
-# Transfer files
-transfer_input_files = train_mnist.py
+# Transfer files (including container from home)
+transfer_input_files = train_mnist.py, /home/nandwani2/segformer.sif
 
 # Output files
 log = logs/mnist_$(Cluster)_$(Process).log
 error = logs/mnist_$(Cluster)_$(Process).err
 output = logs/mnist_$(Cluster)_$(Process).out
 
-# Environment variables for WandB
-environment = "WANDB_API_KEY=f04957e341167ac5452921a251b0921fedd3558b WANDB_PROJECT=chtc-mnist"
+# Use the transferred container
++SingularityImage = "segformer.sif"
 
-# GPU Requirements
+# Environment variables for WandB
+environment = "WANDB_API_KEY=$(WANDB_API_KEY) WANDB_PROJECT=chtc-mnist"
+
+# GPU Lab opt-in
++WantGPULab = true
++GPUJobLength = "short"
+
+# GPU Requirements - 8GB VRAM minimum
 request_gpus = 1
+gpus_minimum_memory = 8000
+
+# Resource requests
 request_cpus = 4
 request_memory = 16GB
-request_disk = 10GB
-
-# CHTC staging requirement + GPU capability
-Requirements = (Target.HasCHTCStaging == true) && (TARGET.CUDACapability >= 5.0)
+request_disk = 25GB
 
 # Queue the job
 queue 1
