@@ -4,6 +4,17 @@ Initial reading queue. This is intentionally a scaffold, not a finished survey.
 
 ## 1. Verification Agents
 
+### FVDebug: An LLM-Driven Debugging Assistant for Automated Root Cause Analysis of Formal Verification Failures
+
+Yunsheng Bai, Ghaith Bany Hamad, Chia-Tung Ho, Syed Suhaib, and Haoxing Ren (NVIDIA), September 2025. [arXiv:2510.15906v1](https://arxiv.org/abs/2510.15906v1); [paper PDF](fvdebug-2510.15906.pdf), distributed under the paper's [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/).
+
+- **Problem:** Diagnose formal-verification counterexamples using traces, RTL, and design specifications, then propose fixes.
+- **Method:** Build a causal graph through JasperGold queries, scan it with batched arguments for and against suspected faults, explore competing causal explanations, and generate candidate RTL patches.
+- **Reported evaluation:** On 38 hardware failures, the authors report 95.6% hypothesis quality, 71.1% Pass@1 and 86.8% Pass@5 fix rates. They also study two proprietary production-scale counterexamples. These are paper-reported results, not measurements reproduced here.
+- **Relevance:** A concrete reference for connecting structured waveform evidence to tool-assisted diagnosis and patch validation. Its JasperGold-dependent graph extraction and evaluation scope matter when comparing it with other verification assistants.
+
+Further reading topics:
+
 - Agentic debug for simulation failures, waveform analysis, assertion triage
 - LLM tool-use systems that operate over structured logs, traces, and state machines
 - Benchmarks for debugging tasks in hardware environments
